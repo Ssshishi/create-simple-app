@@ -1,0 +1,15 @@
+{
+  "name": "create-simple-app",
+  "version": "1.0.0",
+  "description": "simple app includes multi frameWorks",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "next",
+    "umi",
+    "vite"
+  ],
+  "repository": "git@github.com:Ssshishi/create-simple-app.git",
+  "author": "shenshilovezy@gmail.com",
+  "license": "MIT"
+}
