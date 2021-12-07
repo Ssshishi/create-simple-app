@@ -24,6 +24,8 @@ export async function getRepoInfo(
   const [, username, name, t, _branch, ...file] = url.pathname.split('/')
   const filePath = examplePath ? examplePath.replace(/^\//, '') : file.join('/')
 
+  // Support repos whose entire purpose is to be a NextJS example, e.g.
+  // https://github.com/:username/:my-cool-nextjs-example-repo-name.
   if (t === undefined) {
     const infoResponse = await got(
       `https://api.github.com/repos/${username}/${name}`,
@@ -35,11 +37,12 @@ export async function getRepoInfo(
     return { username, name, branch: info['default_branch'], filePath }
   }
 
+  // If examplePath is available, the branch name takes the entire path
   const branch = examplePath
     ? `${_branch}/${file.join('/')}`.replace(new RegExp(`/${filePath}|/$`), '')
     : _branch
 
-  if (username && name && branch && t === 'true') {
+  if (username && name && branch && t === 'tree') {
     return { username, name, branch, filePath }
   }
 }
@@ -52,10 +55,19 @@ export function hasRepo({
 }: RepoInfo): Promise<boolean> {
   const contentsUrl = `https://api.github.com/repos/${username}/${name}/contents`
   const packagePath = `${filePath ? `/${filePath}` : ''}/package.json`
+
   return isUrlOk(contentsUrl + packagePath + `?ref=${branch}`)
 }
 
-export function downloadAndExtraRepo(
+export function hasExample(name: string): Promise<boolean> {
+  return isUrlOk(
+    `https://api.github.com/repos/vercel/next.js/contents/examples/${encodeURIComponent(
+      name,
+    )}/package.json`,
+  )
+}
+
+export function downloadAndExtractRepo(
   root: string,
   { username, name, branch, filePath }: RepoInfo,
 ): Promise<void> {
@@ -70,13 +82,14 @@ export function downloadAndExtraRepo(
   )
 }
 
-export function downloadAndExtraExample(
+export function downloadAndExtractExample(
   root: string,
   name: string,
 ): Promise<void> {
   if (name === '__internal-testing-retry') {
-    throw new Error('this is an internal example for testing the CI')
+    throw new Error('This is an internal example for testing the CLI.')
   }
+
   return pipeline(
     got.stream('https://codeload.github.com/vercel/next.js/tar.gz/canary'),
     tar.extract({ cwd: root, strip: 3 }, [`next.js-canary/examples/${name}`]),
