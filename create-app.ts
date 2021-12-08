@@ -36,8 +36,8 @@ export async function createApp({
   typescript?: boolean
 }): Promise<void> {
   let repoInfo: RepoInfo | undefined
-  const template = typescript ? 'typescript' : 'default'
 
+  const template = 'typescript'
   if (example) {
     let repoUrl: URL | undefined
 
@@ -210,9 +210,8 @@ export async function createApp({
         lint: 'next lint',
       },
     }
-    /**
-     * Write it to disk.
-     */
+
+    // 读到磁盘disk里面
     fs.writeFileSync(
       path.join(root, 'package.json'),
       JSON.stringify(packageJson, null, 2) + os.EOL,
@@ -221,13 +220,10 @@ export async function createApp({
      * These flags will be passed to `install()`.
      */
     const installFlags = { useYarn, isOnline }
-    /**
-     * Default dependencies.
-     */
+
+    // 默认依赖
     const dependencies = ['react', 'react-dom', 'next']
-    /**
-     * Default devDependencies.
-     */
+    // 默认开发依赖
     const devDependencies = ['eslint', 'eslint-config-next']
     /**
      * TypeScript projects will have type definitions and other devDependencies.
@@ -235,9 +231,7 @@ export async function createApp({
     if (typescript) {
       devDependencies.push('typescript', '@types/react', '@types/node')
     }
-    /**
-     * Install package.json dependencies if they exist.
-     */
+    // 安装package.json 的 dependencies
     if (dependencies.length) {
       console.log()
       console.log('Installing dependencies:')
@@ -248,9 +242,8 @@ export async function createApp({
 
       await install(root, dependencies, installFlags)
     }
-    /**
-     * Install package.json devDependencies if they exist.
-     */
+
+    //安装package.json文件中的 devDependencies
     if (devDependencies.length) {
       console.log()
       console.log('Installing devDependencies:')
@@ -263,9 +256,8 @@ export async function createApp({
       await install(root, devDependencies, devInstallFlags)
     }
     console.log()
-    /**
-     * Copy the template files to the target directory.
-     */
+
+    // 拷贝 template文件到目标文件夹里面
     await cpy('**', root, {
       parents: true,
       cwd: path.join(__dirname, 'templates', template),
@@ -275,8 +267,6 @@ export async function createApp({
           case 'eslintrc.json': {
             return '.'.concat(name)
           }
-          // README.md is ignored by webpack-asset-relocator-loader used by ncc:
-          // https://github.com/vercel/webpack-asset-relocator-loader/blob/e9308683d47ff507253e37c9bcbb99474603192b/src/asset-relocator.js#L227
           case 'README-template.md': {
             return 'README.md'
           }
