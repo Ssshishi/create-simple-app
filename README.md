@@ -1,12 +1,36 @@
 # create-simple-app
 
-简单的脚手架
+简单的脚手架 npm包
 
-### 本地安装
+### 安装
+```sh
+ npm install maria-cli -g
+```
 
+### 运行
+```sh
+  npx maria-cli create <template-project>
+  # 或者
+  maria-cli create <template-project>
 ```
- git clone
+
+### 本地运行
+
+```sh
+ // 本地安装
+ git clone git@github.com:Ssshishi/create-simple-app.git 
+ 
+ # 运行 
+ yarn build
+ 
+ # 建立软链接
+ npm link
+ 
+ # 创建新项目
+ maria-cli create <template-project>
 ```
+
+
 
 ### 核心依赖
 
@@ -20,3 +44,5 @@
 - log-symbols 日志着色
 - semver 语义化日志控制
 - validate-npm-package-name 校验包名
+
+### 
