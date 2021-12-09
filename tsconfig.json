@@ -2,10 +2,14 @@
   "compilerOptions": {
     "target": "es2019",
     "moduleResolution": "node",
+    "module": "commonjs",
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
-  "exclude": ["templates", "dist"]
+  "include": ["src"],
+  "exclude": ["templates"]
 }

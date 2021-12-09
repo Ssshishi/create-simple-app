@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ appName }}</title>
+    <style>
+      #text_check {
+        display: none;
+      }
+      #a_edge {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="{{ appTemplate }}"></div>
+
+    <h2 id="text_check">
+      当前正在为你检测环境...
+      <span id="span_time_remain"></span>
+    </h2>
+    <a id="a_edge" href="https://www.microsoft.com/zh-cn/edge">
+      当前浏览器环境可能造成数据泄露，即将跳转下载安全浏览器
+    </a>
+    <script>
+      function checkIe() {
+        var userAgent = navigator.userAgent
+        var isIe =
+          (userAgent.indexOf('compatible') > -1 &&
+            userAgent.indexOf('MSIE') > -1) ||
+          userAgent.indexOf('Trident') > -1
+        var isOldEdge = userAgent.indexOf('Edge') > -1
+        if (isIe || isOldEdge) {
+          document.getElementById('text_check').style.display = 'block'
+          countDown()
+        }
+      }
+
+      var timeCount = 5
+      function countDown() {
+        timeCount--
+        var span_time = document.getElementById('span_time_remain')
+        span_time.style.display = 'inline'
+        span_time.innerHTML = timeCount + 'S'
+        if (timeCount === 1) {
+          document.getElementById('text_check').style.display = 'none'
+          var a_edge = document.getElementById('a_edge')
+          a_edge.style.display = 'block'
+          setTimeout(function () {
+            a_edge.click()
+          }, 1000)
+          return
+        }
+        setTimeout(function () {
+          countDown()
+        }, 1000)
+      }
+
+      checkIe()
+    </script>
+    <script type="module" src="/src/main.{{ appType }}"></script>
+  </body>
+</html>

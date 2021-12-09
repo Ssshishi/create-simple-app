@@ -1,0 +1,14 @@
+{
+  "name": "{{ appName }}",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "lint": "eslint \"src/**/*.{ts,js,tsx,jsx}\" --fix",
+    "prettier": "prettier ./src -w",
+    "prepare": "husky install"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
